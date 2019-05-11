@@ -1,5 +1,7 @@
 package ai.tomorrow.justjava;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,16 +40,31 @@ public class MainActivity extends AppCompatActivity {
         Log.v("MainActivity", "has whipped cream: " + hasWhippedCream);
         Log.v("MainActivity", "has chocolate: " + haschoco);
 
-        String priceMessage = CreateOrderSummary(hasWhippedCream, haschoco, name);
+        int price = 5;
+        if(hasWhippedCream)
+            price++;
+        if(haschoco)
+            price += 2;
+
+        String priceMessage = CreateOrderSummary(price, hasWhippedCream, haschoco, name);
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "JustJava order for " + name);
+        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
         displayMessage(priceMessage);
     }
 
-    private String CreateOrderSummary(boolean hasWhippedCream, boolean haschoco, String name){
+    private String CreateOrderSummary(int price, boolean hasWhippedCream, boolean haschoco, String name){
         String priceMessage = "Name: " + name;
         priceMessage += "\nAdd whipped cream? " + hasWhippedCream;
         priceMessage += "\nAdd chocolate? " + haschoco;
         priceMessage += "\nQuantity: " + quantity;
-        priceMessage += "\nTotal: $" + quantity * 5;
+        priceMessage += "\nTotal: $" + quantity * price;
         priceMessage += "\n Thank you!";
         return priceMessage;
     }
@@ -62,12 +79,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void increment(View view) {
-        quantity++;
+        if(quantity <= 99)
+            quantity++;
+        else
+            return;
         display(quantity);
     }
 
     public void decrement(View view) {
-        quantity--;
+        if(quantity > 1)
+            quantity--;
+        else
+            return;
         display(quantity);
     }
 
