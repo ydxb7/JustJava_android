@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String CreateOrderSummary(int price, boolean hasWhippedCream, boolean haschoco, String name){
-        String priceMessage = "Name: " + name;
-        priceMessage += "\nAdd whipped cream? " + hasWhippedCream;
-        priceMessage += "\nAdd chocolate? " + haschoco;
-        priceMessage += "\nQuantity: " + quantity;
-        priceMessage += "\nTotal: $" + quantity * price;
-        priceMessage += "\n Thank you!";
+        String priceMessage = getString(R.string.order_summary_name, name); // name用来填补 %s的内容
+        priceMessage += "\n " + getString(R.string.Add_whipped_cream) + hasWhippedCream;
+        priceMessage += "\n " + getString(R.string.Add_chocolate) + haschoco;
+        priceMessage += "\n " + getString(R.string.quantity) + ": " + quantity;
+        priceMessage += "\n " + getString(R.string.Total) + ": $" + quantity * price;
+        priceMessage += "\n" + getString(R.string.thank_you);
         return priceMessage;
     }
 
